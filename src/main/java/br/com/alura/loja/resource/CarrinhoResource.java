@@ -3,6 +3,7 @@ package br.com.alura.loja.resource;
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -35,5 +36,14 @@ public class CarrinhoResource {
         
         Response response = Response.created(URI.create("carrinhos/" + carrinho.getId())).build();
         return response;
+    }
+    
+    @Path("{id}/produtos/{produtoId}")
+    @DELETE
+    @Consumes(MediaType.APPLICATION_XML)
+    public Response delete(@PathParam("id") long id, @PathParam("produtoId") long produtoId) {
+        Carrinho carrinho = new CarrinhoDAO().busca(id);
+        carrinho.remove(produtoId);
+        return Response.ok().build();
     }
 }

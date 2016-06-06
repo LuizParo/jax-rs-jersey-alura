@@ -57,4 +57,10 @@ public class ProjetoResourceTest {
         String projetoEmXML = this.client.target(location).request().get(String.class);
         Assert.assertTrue(projetoEmXML.contains("Proj 1"));
     }
+    
+    @Test
+    public void testaQueUmProjetoEhRemovido() {
+        Response responseDelete = this.target.path("projetos/1").request().delete();
+        Assert.assertEquals(200, responseDelete.getStatus());
+    }
 }

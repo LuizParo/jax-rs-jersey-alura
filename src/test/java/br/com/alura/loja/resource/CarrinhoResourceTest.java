@@ -61,4 +61,15 @@ public class CarrinhoResourceTest {
         
         Assert.assertTrue(novoCarrinhoEmXML.contains("Tablet"));
     }
+    
+    @Test
+    public void testaQueUmProdutoEhRemovidoDoCarrinho() {
+        Response response = this.target.path("carrinhos/1/produtos/6237").request().delete();
+        Assert.assertEquals(200, response.getStatus());
+        
+        String carrinhoEmXML = this.target.path("/carrinhos/1").request().get(String.class);
+        Carrinho carrinho = (Carrinho) new XStream().fromXML(carrinhoEmXML);
+        
+        Assert.assertTrue(carrinho.getProdutos().size() == 1);
+    }
 }
