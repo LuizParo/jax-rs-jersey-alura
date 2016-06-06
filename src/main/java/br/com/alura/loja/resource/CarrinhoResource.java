@@ -1,11 +1,15 @@
 package br.com.alura.loja.resource;
 
+import java.net.URI;
+
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -24,10 +28,12 @@ public class CarrinhoResource {
     }
     
     @POST
-    @Produces(MediaType.APPLICATION_XML)
-    public String envia(String conteudo) {
+    @Consumes(MediaType.APPLICATION_XML)
+    public Response envia(String conteudo) {
         Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
         new CarrinhoDAO().adiciona(carrinho);
-        return "<status>sucesso</status>";
+        
+        Response response = Response.created(URI.create("carrinhos/" + carrinho.getId())).build();
+        return response;
     }
 }

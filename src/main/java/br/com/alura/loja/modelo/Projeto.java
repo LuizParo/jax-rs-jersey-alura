@@ -11,7 +11,11 @@ public class Projeto {
     public Projeto() {}
     
     public Projeto(long id, String nome, int anoDeInicio) {
+        this(nome, anoDeInicio);
         this.id = id;
+    }
+    
+    public Projeto(String nome, int anoDeInicio) {
         this.nome = nome;
         this.anoDeInicio = anoDeInicio;
     }
