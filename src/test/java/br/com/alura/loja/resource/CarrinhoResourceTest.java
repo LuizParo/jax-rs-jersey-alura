@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.logging.LoggingFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +29,11 @@ public class CarrinhoResourceTest {
     @Before
     public void setUp() {
         this.server = Servidor.inicializaServidor();
-        this.client = ClientBuilder.newClient();
+        
+        ResourceConfig config = new ResourceConfig(CarrinhoResource.class);
+        config.register(LoggingFeature.class);
+        
+        this.client = ClientBuilder.newClient(config);
         this.target = this.client.target("http://localhost:8080");
     }
     
