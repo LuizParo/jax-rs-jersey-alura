@@ -13,8 +13,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thoughtworks.xstream.XStream;
-
 import br.com.alura.loja.Servidor;
 import br.com.alura.loja.modelo.Projeto;
 
@@ -37,10 +35,7 @@ public class ProjetoResourceTest {
 
     @Test
     public void testaServidorProjeto() {
-        String conteudo = this.target.path("/projetos/1").request().get(String.class);
-        
-        Projeto projeto = (Projeto) new XStream().fromXML(conteudo);
-        
+        Projeto projeto = this.target.path("/projetos/1").request().get(Projeto.class);
         Assert.assertNotNull(projeto);
         Assert.assertEquals("Minha loja", projeto.getNome());
     }
@@ -49,13 +44,13 @@ public class ProjetoResourceTest {
     public void testaQueUmProjetoSejaSalvoUtilizandoPost() {
         Projeto projeto = new Projeto("Proj 1", 2000);
         
-        Entity<String> entity = Entity.entity(projeto.toXML(), MediaType.APPLICATION_XML);
+        Entity<Projeto> entity = Entity.entity(projeto, MediaType.APPLICATION_XML);
         Response response = this.target.path("projetos").request().post(entity);
         Assert.assertEquals(201, response.getStatus());
         
         String location = response.getHeaderString("Location");
-        String projetoEmXML = this.client.target(location).request().get(String.class);
-        Assert.assertTrue(projetoEmXML.contains("Proj 1"));
+        Projeto projetoRecuperado = this.client.target(location).request().get(Projeto.class);
+        Assert.assertEquals("Proj 1", projetoRecuperado.getNome());
     }
     
     @Test

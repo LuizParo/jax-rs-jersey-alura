@@ -12,8 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.thoughtworks.xstream.XStream;
-
 import br.com.alura.loja.dao.ProjetoDAO;
 import br.com.alura.loja.modelo.Projeto;
 
@@ -23,15 +21,13 @@ public class ProjetoResource {
     @Path("{id}")
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public String busca(@PathParam("id") long id) {
-        Projeto projeto = new ProjetoDAO().busca(id);
-        return projeto.toXML();
+    public Projeto busca(@PathParam("id") long id) {
+        return new ProjetoDAO().busca(id);
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public Response envia(String conteudo) {
-        Projeto projeto = (Projeto) new XStream().fromXML(conteudo);
+    public Response envia(Projeto projeto) {
         new ProjetoDAO().adiciona(projeto);
         return Response.created(URI.create("projetos/" + projeto.getId())).build();
     }
